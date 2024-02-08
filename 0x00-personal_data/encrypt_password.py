@@ -9,4 +9,4 @@ from bcrypt import hashpw, gensalt
 
 def hash_password(password: str) -> bytes:
     """encrypts password using bcrypt"""
-    return hashpw(password.encode("utf-8"), gensalt())
+    return hashpw(password.encode('utf-8'), gensalt())
