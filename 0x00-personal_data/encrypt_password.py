@@ -4,6 +4,7 @@ a function that expects one string argument
 and returns a salted, hashed password,
 which is a byte string
 """
+# import bcrypt
 from bcrypt import hashpw, gensalt
 
 
