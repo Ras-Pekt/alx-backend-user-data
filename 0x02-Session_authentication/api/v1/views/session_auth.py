@@ -12,15 +12,15 @@ from os import getenv
 def login():
     """Session Authentication route"""
     email = request.form.get('email')
-    if not email:
+    if not email or email == "":
         return jsonify({"error": "email missing"}), 400
 
     password = request.form.get('password')
-    if not password:
+    if not password or password == "":
         return jsonify({"error": "password missing"}), 400
 
     users = User.search({'email': email})
-    if not users:
+    if not users or users == []:
         return jsonify({"error": "no user found for this email"}), 404
 
     user: User = users[0]
