@@ -21,7 +21,6 @@ class DB:
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=True)
-        # self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -44,12 +43,18 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """returns the first row found"""
-        try:
+        # try:
+        #     user = self._session.query(User).filter_by(**kwargs).first()
+        #     if user is None:
+        #         raise NoResultFound
+        #     return user
+        # except NoResultFound as e:
+        #     raise e
+        # except InvalidRequestError as e:
+        #     raise e
+        if kwargs:
             user = self._session.query(User).filter_by(**kwargs).first()
-            if user is None:
-                raise NoResultFound
-            return user
-        except NoResultFound as e:
-            raise e
-        except InvalidRequestError as e:
-            raise e
+            if user:
+                return user
+            raise NoResultFound
+        raise InvalidRequestError
