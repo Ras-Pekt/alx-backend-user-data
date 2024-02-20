@@ -43,18 +43,19 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """returns the first row found"""
-        # try:
-        #     user = self._session.query(User).filter_by(**kwargs).first()
-        #     if user is None:
-        #         raise NoResultFound
-        #     return user
-        # except NoResultFound as e:
-        #     raise e
-        # except InvalidRequestError as e:
-        #     raise e
         if kwargs:
             user = self._session.query(User).filter_by(**kwargs).first()
             if user:
                 return user
             raise NoResultFound
         raise InvalidRequestError
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """updates a user"""
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError()
+        self._session.commit()
