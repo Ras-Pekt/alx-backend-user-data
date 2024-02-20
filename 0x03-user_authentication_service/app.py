@@ -16,7 +16,7 @@ def home():
 
 
 @app.route("/users", methods=["POST"])
-def users():
+def register():
     """register new user route"""
     email = request.form.get("email")
     password = request.form.get("password")
@@ -29,7 +29,7 @@ def users():
 
 
 @app.route("/sessions", methods=["POST"])
-def sessions():
+def login():
     """sessions route handler"""
     email = request.form.get("email")
     password = request.form.get("password")
@@ -62,8 +62,19 @@ def profile():
     abort(403)
 
 
-@app.route("/reset_password", methods=["POST", "PUT"])
+@app.route("/reset_password", methods=["POST"])
 def get_reset_password_token():
+    """reset password token route"""
+    email = request.form.get("email")
+    try:
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": token})
+    except ValueError:
+        abort(403)
+
+
+@app.route("/reset_password", methods=["PUT"])
+def update_password():
     """reset password token route"""
     email = request.form.get("email")
     token = request.form.get("reset_token")
