@@ -62,13 +62,15 @@ def profile():
     abort(403)
 
 
-@app.route("/reset_password", methods=["POST"])
+@app.route("/reset_password", methods=["POST", "PUT"])
 def get_reset_password_token():
     """reset password token route"""
     email = request.form.get("email")
+    token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
     try:
-        reset_token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": f"{email}", "reset_token": f"{reset_token}"})
+        AUTH.update_password(token, new_password)
+        return jsonify({"email": f"{email}", "message": "Password updated"})
     except Exception:
         abort(403)
 
